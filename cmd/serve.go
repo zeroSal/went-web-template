@@ -11,11 +11,10 @@ import (
 )
 
 type ServeCmd struct {
-	kernel *app.Kernel
 }
 
-func NewServeCmd(kernel *app.Kernel) command.Interface {
-	return &ServeCmd{kernel: kernel}
+func NewServeCmd() command.Interface {
+	return &ServeCmd{}
 }
 
 func (c *ServeCmd) GetHeader() command.Header {
@@ -33,9 +32,11 @@ func (c *ServeCmd) Invoke() any {
 func (c *ServeCmd) run(
 	env *config.Env,
 	log *logger.ConsoleLogger,
+	buildSpec *app.BuildSpecs,
 	irisApp *iris.Application,
 ) {
 	addr := fmt.Sprintf("%s:%d", env.Host, env.Port)
 	log.Info("The web server is running on http://" + addr)
+	log.Info(buildSpec.GetBuildDate())
 	irisApp.Listen(addr, iris.WithoutStartupLog)
 }

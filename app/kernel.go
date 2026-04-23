@@ -10,7 +10,6 @@ import (
 
 	"github.com/kataras/iris/v12"
 	"go.uber.org/fx"
-	"go.uber.org/fx/fxevent"
 )
 
 type Kernel struct {
@@ -28,20 +27,15 @@ func NewKernel(
 	}
 }
 
-func (a *Kernel) Run(invoke any, args []string, opts ...fx.Option) {
+func (a *Kernel) Run(invoke any, opts ...fx.Option) {
 	buildSpec := func() *BuildSpecs {
 		return a.BuildSpecs
-	}
-
-	provideArgs := func() []string {
-		return args
 	}
 
 	appOpts := []fx.Option{
 		di.Container,
 		fx.Supply(a.EmbedFS),
 		fx.Provide(buildSpec),
-		fx.Provide(provideArgs),
 		fx.Provide(config.NewEnv),
 		fx.Provide(InitIris),
 		fx.Invoke(InitWorkingDirs),
@@ -54,10 +48,6 @@ func (a *Kernel) Run(invoke any, args []string, opts ...fx.Option) {
 	app.Start(context.Background())
 	app.Stop(context.Background())
 }
-
-type nopLogger struct{}
-
-func (nopLogger) LogEvent(event fxevent.Event) {}
 
 func InitWorkingDirs(
 	env *config.Env,

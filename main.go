@@ -11,22 +11,23 @@ var Version = ""
 var Channel = ""
 var BuildDate = ""
 
+//go:embed templates/* static/*
 var EmbedFS embed.FS
 
 func main() {
 	buildSpecs := app.NewBuildSpecs(Version, Channel, BuildDate)
 	kernel := app.NewKernel(EmbedFS, buildSpecs)
 
-	commands := []command.RegistrableCommand{
-		{Name: "serve", Cmd: func() command.Interface { return cmd.NewServeCmd(kernel) }},
-		{Name: "greet", Cmd: func() command.Interface { return cmd.NewGreetCmd(kernel) }},
+	commands := []func() command.Interface{
+		cmd.NewGreetCmd,
+		cmd.NewServeCmd,
 	}
 
 	if err := command.Register(
 		commands,
 		"template",
-		func(instance command.Interface, args []string, flags map[string]any) {
-			kernel.Run(instance.Invoke(), args)
+		func(instance command.Interface) {
+			kernel.Run(instance.Invoke())
 		},
 	).Execute(); err != nil {
 		panic(err)
