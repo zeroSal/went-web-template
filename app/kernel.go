@@ -27,7 +27,7 @@ func NewKernel(
 	}
 }
 
-func (a *Kernel) Run(invoke any, opts ...fx.Option) {
+func (a *Kernel) Run(invoke any, opts ...fx.Option) error {
 	buildSpec := func() *BuildSpecs {
 		return a.BuildSpecs
 	}
@@ -36,7 +36,7 @@ func (a *Kernel) Run(invoke any, opts ...fx.Option) {
 		di.Container,
 		fx.Supply(a.EmbedFS),
 		fx.Provide(buildSpec),
-		fx.Provide(config.NewEnv),
+		fx.Provide(config.LoadEnv),
 		fx.Provide(InitIris),
 		fx.Invoke(InitWorkingDirs),
 		fx.Invoke(invoke),
@@ -45,8 +45,15 @@ func (a *Kernel) Run(invoke any, opts ...fx.Option) {
 
 	app := fx.New(append(appOpts, opts...)...)
 
-	app.Start(context.Background())
-	app.Stop(context.Background())
+	if err := app.Start(context.Background()); err != nil {
+		return err
+	}
+
+	if err := app.Stop(context.Background()); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func InitWorkingDirs(

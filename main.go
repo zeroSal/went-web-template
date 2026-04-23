@@ -27,7 +27,9 @@ func main() {
 		commands,
 		"template",
 		func(instance command.Interface) {
-			kernel.Run(instance.Invoke())
+			if err := kernel.Run(instance.Invoke()); err != nil {
+				panic(err)
+			}
 		},
 	).Execute(); err != nil {
 		panic(err)

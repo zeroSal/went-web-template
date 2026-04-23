@@ -13,11 +13,7 @@ type Env struct {
 	LogLevel string `mapstructure:"LOG_LEVEL" default:"info"`
 }
 
-func NewEnv() (*Env, error) {
-	return Load()
-}
-
-func Load() (*Env, error) {
+func LoadEnv() (*Env, error) {
 	env := &Env{
 		Env:      "dev",
 		VarDir:   "var",
@@ -39,7 +35,10 @@ func Load() (*Env, error) {
 	}
 
 	if port := os.Getenv("PORT"); port != "" {
-		fmt.Sscanf(port, "%d", &env.Port)
+		_, err := fmt.Sscanf(port, "%d", &env.Port)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if level := os.Getenv("LOG_LEVEL"); level != "" {

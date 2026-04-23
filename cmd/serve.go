@@ -10,6 +10,8 @@ import (
 	"github.com/zeroSal/go-semantic-log/logger"
 )
 
+var _ command.Interface = (*GreetCmd)(nil)
+
 type ServeCmd struct {
 }
 
@@ -34,9 +36,13 @@ func (c *ServeCmd) run(
 	log *logger.ConsoleLogger,
 	buildSpec *app.BuildSpecs,
 	irisApp *iris.Application,
-) {
+) error {
 	addr := fmt.Sprintf("%s:%d", env.Host, env.Port)
 	log.Info("The web server is running on http://" + addr)
 	log.Info(buildSpec.GetBuildDate())
-	irisApp.Listen(addr, iris.WithoutStartupLog)
+	if err := irisApp.Listen(addr, iris.WithoutStartupLog); err != nil {
+		return err
+	}
+
+	return nil
 }

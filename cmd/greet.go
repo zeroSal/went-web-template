@@ -8,6 +8,8 @@ import (
 	"github.com/zeroSal/go-semantic-log/logger"
 )
 
+var _ command.Interface = (*GreetCmd)(nil)
+
 type GreetCmd struct {
 	NoWarning *bool
 	Name      *string
@@ -41,7 +43,7 @@ func (c *GreetCmd) Invoke() any {
 func (c *GreetCmd) run(
 	logger *logger.ConsoleLogger,
 	buildSpec *app.BuildSpecs,
-) {
+) error {
 	name := ""
 	if c.Args != nil && *c.Args != "" {
 		name = *c.Args
@@ -59,4 +61,6 @@ func (c *GreetCmd) run(
 	if c.NoWarning == nil || !*c.NoWarning {
 		logger.Warn("WORKSS!")
 	}
+
+	return nil
 }
