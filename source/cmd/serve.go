@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"template/app"
-	"template/app/config"
+	"webtemplate/app"
+	"webtemplate/app/config"
 
 	"github.com/zeroSal/went-clio/clio"
 	"github.com/zeroSal/went-command/command"

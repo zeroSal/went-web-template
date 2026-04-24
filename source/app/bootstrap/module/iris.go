@@ -2,7 +2,7 @@ package module
 
 import (
 	"embed"
-	"template/app/config"
+	"webtemplate/app/config"
 
 	"github.com/kataras/iris/v12"
 )

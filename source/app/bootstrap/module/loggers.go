@@ -3,7 +3,7 @@ package module
 import (
 	"context"
 	"fmt"
-	"template/app/config"
+	"webtemplate/app/config"
 
 	"github.com/zeroSal/went-logger/logger"
 	"go.uber.org/fx"

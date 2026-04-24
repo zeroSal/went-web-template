@@ -1,11 +1,1 @@
-var
-vendor
-coverage
-
-.env
-
-build/*
-!build/.gitkeep
-!build/tmp/
-build/tmp/*
-!build/tmp/.gitkeep
+template*

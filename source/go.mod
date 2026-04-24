@@ -1,4 +1,4 @@
-module template
+module webtemplate
 
 go 1.25.5
 

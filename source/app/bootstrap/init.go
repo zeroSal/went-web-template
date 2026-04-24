@@ -3,8 +3,8 @@ package bootstrap
 import (
 	"fmt"
 	"os"
-	"template/app/bootstrap/module"
-	"template/app/config"
+	"webtemplate/app/bootstrap/module"
+	"webtemplate/app/config"
 
 	"go.uber.org/fx"
 )

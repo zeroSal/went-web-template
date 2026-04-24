@@ -3,7 +3,7 @@ package app
 import (
 	"context"
 	"embed"
-	"template/app/bootstrap"
+	"webtemplate/app/bootstrap"
 
 	"github.com/zeroSal/went-clio/clio"
 	"go.uber.org/fx"

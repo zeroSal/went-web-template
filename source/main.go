@@ -4,8 +4,8 @@ import (
 	"embed"
 	"fmt"
 	"os"
-	"template/app"
-	"template/cmd"
+	"webtemplate/app"
+	"webtemplate/cmd"
 
 	"github.com/zeroSal/went-clio/clio"
 	"github.com/zeroSal/went-command/command"

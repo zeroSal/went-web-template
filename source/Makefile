@@ -1,4 +1,4 @@
-BINARY_NAME=template
+BINARY_NAME=webtemplate
 BUILD_DIR=build
 
 export CGO_ENABLED=0
