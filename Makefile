@@ -66,4 +66,4 @@ build-dev: go-mod-tidy
 	CHANNEL=dev; \
 	BUILD_DATE=$$(date -u +%Y-%m-%d); \
 	GOFLAGS="-mod=vendor"; \
-	go build -ldflags "-X main.Version=$$VERSION -X main.Channel=$$CHANNEL -X main.BuildDate=$$BUILD_DATE" -o $(BUILD_DIR)/$(BINARY_NAME)-dev main.go
+	go build -ldflags "-X main.Version=$$VERSION -X main.Channel=$$CHANNEL -X main.BuildDate=$$BUILD_DATE" -o $(BUILD_DIR)/app-dev main.go

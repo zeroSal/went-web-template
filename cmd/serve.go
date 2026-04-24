@@ -4,15 +4,16 @@ import (
 	"fmt"
 	"template/app"
 	"template/app/config"
-	"template/cmd/command"
+
+	"github.com/zeroSal/went-clio/clio"
+	"github.com/zeroSal/went-command/command"
 
 	"github.com/kataras/iris/v12"
-	"github.com/zeroSal/go-semantic-log/logger"
 )
 
-var _ command.Interface = (*GreetCmd)(nil)
-
+var _ command.Interface = (*ServeCmd)(nil)
 type ServeCmd struct {
+	command.Base
 }
 
 func NewServeCmd() command.Interface {
@@ -23,7 +24,7 @@ func (c *ServeCmd) GetHeader() command.Header {
 	return command.Header{
 		Use:   "serve",
 		Short: "Run the web server",
-		Long:  "Run the web server",
+		Long:  "Run the web server on the configured host and port.",
 	}
 }
 
@@ -33,13 +34,14 @@ func (c *ServeCmd) Invoke() any {
 
 func (c *ServeCmd) run(
 	env *config.Env,
-	log *logger.ConsoleLogger,
+	clio *clio.Clio,
 	buildSpec *app.BuildSpecs,
 	irisApp *iris.Application,
 ) error {
+	clio.Banner(buildSpec.GetVersion(), buildSpec.GetChannel(), buildSpec.GetBuildDate())
+
 	addr := fmt.Sprintf("%s:%d", env.Host, env.Port)
-	log.Info("The web server is running on http://" + addr)
-	log.Info(buildSpec.GetBuildDate())
+	clio.Info("The web server is running on http://" + addr)
 	if err := irisApp.Listen(addr, iris.WithoutStartupLog); err != nil {
 		return err
 	}

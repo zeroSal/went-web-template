@@ -3,9 +3,12 @@ module template
 go 1.25.5
 
 require (
+	github.com/joho/godotenv v1.5.1
 	github.com/kataras/iris/v12 v12.2.11
 	github.com/spf13/cobra v1.10.2
-	github.com/zeroSal/go-semantic-log v1.1.0
+	github.com/zeroSal/went-clio v1.1.0
+	github.com/zeroSal/went-command v1.0.0
+	github.com/zeroSal/went-logger v1.0.0
 	go.uber.org/fx v1.24.0
 )
 
@@ -52,7 +55,8 @@ require (
 	golang.org/x/crypto v0.22.0 // indirect
 	golang.org/x/exp v0.0.0-20240404231335-c0f41cb1a7a0 // indirect
 	golang.org/x/net v0.24.0 // indirect
-	golang.org/x/sys v0.19.0 // indirect
+	golang.org/x/sys v0.43.0 // indirect
+	golang.org/x/term v0.42.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	google.golang.org/protobuf v1.33.0 // indirect

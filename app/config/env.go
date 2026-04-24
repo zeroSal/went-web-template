@@ -1,25 +1,29 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 	"os"
+	"strconv"
+
+	"github.com/joho/godotenv"
 )
 
 type Env struct {
-	Env      string `mapstructure:"ENV" default:"dev"`
-	VarDir   string `mapstructure:"VAR_DIR" default:"var"`
-	Host     string `mapstructure:"HOST" default:"127.0.0.1"`
-	Port     int    `mapstructure:"PORT" default:"8080"`
-	LogLevel string `mapstructure:"LOG_LEVEL" default:"info"`
+	Env    string
+	VarDir string
+	Host   string
+	Port   int
 }
 
-func LoadEnv() (*Env, error) {
+func LoadEnv() *Env {
+	_ = godotenv.Load()
+
 	env := &Env{
-		Env:      "dev",
-		VarDir:   "var",
-		Host:     "127.0.0.1",
-		Port:     8080,
-		LogLevel: "info",
+		Env:    "dev",
+		VarDir: "var",
+		Host:   "127.0.0.1",
+		Port:   3096,
 	}
 
 	if environment := os.Getenv("ENV"); environment != "" {
@@ -35,27 +39,31 @@ func LoadEnv() (*Env, error) {
 	}
 
 	if port := os.Getenv("PORT"); port != "" {
-		_, err := fmt.Sscanf(port, "%d", &env.Port)
-		if err != nil {
-			return nil, err
+		portInt, err := strconv.Atoi(port)
+		if err == nil {
+			env.Port = portInt
 		}
 	}
 
-	if level := os.Getenv("LOG_LEVEL"); level != "" {
-		env.LogLevel = level
-	}
-
-	return env, nil
+	return env
 }
 
 func (e *Env) Validate() error {
+	if (e.Env != "dev" && e.Env != "prod") {
+		return errors.New("invalid env provided (it must be 'dev' or 'prod')")
+	}
+
+	if e.Port < 1 || e.Port > 65535 {
+		return errors.New("invalid port provided")
+	}
+
 	return nil
 }
 
 func (e *Env) GetLogsDir() string {
-	return e.VarDir + "/logs"
+	return fmt.Sprintf("%s/logs", e.VarDir)
 }
 
 func (e *Env) GetUploadsDir() string {
-	return e.VarDir + "/uploads"
+	return fmt.Sprintf("%s/uploads", e.VarDir)
 }
