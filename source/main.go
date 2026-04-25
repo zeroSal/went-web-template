@@ -40,9 +40,9 @@ func main() {
 
 	root := &cobra.Command{
 		Version: fmt.Sprintf("%s-%s (%s)", Version, Channel, BuildDate),
-		Use:   "template",
-		Short: "Short description",
-		Long:  "Long description",
+		Use:   "webtemplate",
+		Short: "{{ SHORT_PROJECT_DESCRIPTION }}",
+		Long:  "{{ LONG_PROJECT_DESCRIPTION }}",
 	}
 
 	run := func(instance command.Interface) {
