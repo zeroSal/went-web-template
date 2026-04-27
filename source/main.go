@@ -1,11 +1,13 @@
 package main
 
 import (
+	"context"
 	"embed"
 	"fmt"
 	"os"
 	"webtemplate/app"
-	"webtemplate/cmd"
+	_ "webtemplate/cmd"
+	"webtemplate/registry"
 
 	"github.com/zeroSal/went-clio/clio"
 	"github.com/zeroSal/went-command/command"
@@ -17,43 +19,41 @@ var Version = ""
 var Channel = ""
 var BuildDate = ""
 
-//go:embed templates/* static/*
+//go:embed res/* static/* templates/*
 var EmbedFS embed.FS
 
 func main() {
 	clio := clio.NewClio()
 
-	data, err := EmbedFS.ReadFile("templates/banner.template")
+	data, err := EmbedFS.ReadFile("res/banner.template")
 	if err != nil {
 		clio.Error("Error loading the banner template.")
 		os.Exit(3)
 	}
 
-	buildSpecs := app.NewBuildSpecs(Version, Channel, BuildDate)
-	clio.SetBannerTemplate(string(data))
+	specs := app.NewSpecs(Version, Channel, BuildDate)
+	clio.SetBanner(string(data), Version, Channel, BuildDate)
 
-	kernel := app.NewKernel(EmbedFS, buildSpecs, clio)
+	ctx := context.Background()
 
-	commands := []func() command.Interface{
-		cmd.NewServeCmd,
-	}
+	kernel := app.NewKernel(ctx, EmbedFS, specs, clio)
 
 	root := &cobra.Command{
 		Version: fmt.Sprintf("%s-%s (%s)", Version, Channel, BuildDate),
-		Use:   "webtemplate",
+		Use:   "clitemplate",
 		Short: "{{ SHORT_PROJECT_DESCRIPTION }}",
 		Long:  "{{ LONG_PROJECT_DESCRIPTION }}",
 	}
 
-	run := func(instance command.Interface) {
-		if err := kernel.Run(instance.Invoke()); err != nil {
-			clio.Fatal(err.Error())
+	run := func(command command.Interface) {
+		if err := kernel.Run(command.Invoke()); err != nil {
+			clio.Fatal("%s", err.Error())
 			os.Exit(1)
 		}
 	}
 
-	if err := command.Register(commands, root, run).Execute(); err != nil {
-		clio.Fatal("COMMAND REGISTRATION ERROR: " + err.Error())
+	if err := command.Mount(registry.Command.All(), root, run).Execute(); err != nil {
+		clio.Fatal("Error mounting commands: %s", err.Error())
 		os.Exit(2)
 	}
 }

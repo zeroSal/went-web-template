@@ -84,7 +84,7 @@ func (c *ServeCmd) run(...) error { ... }
 The `Kernel` wraps fx.App creation and execution:
 
 ```go
-kernel := app.NewKernel(EmbedFS, buildSpecs, clio)
+kernel := app.NewKernel(EmbedFS, specs, clio)
 kernel.Run(instance.Invoke())
 ```
 
@@ -164,10 +164,10 @@ Each file defines exactly one primary object (struct or interface). The filename
 Every object must have a constructor named `New<ObjectName>`. Its parameters are exclusively the dependencies to be injected. **No logic, initialization, or side effects of any kind inside the constructor** — it only assigns fields.
 
 ```go
-func NewKernel(embedFS embed.FS, buildSpecs *BuildSpecs, clio *clio.Clio) *Kernel {
+func NewKernel(embedFS embed.FS, specs *Specs, clio *clio.Clio) *Kernel {
     return &Kernel{
         embedFS,
-        buildSpecs,
+        specs,
         clio,
     }
 }

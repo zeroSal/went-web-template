@@ -7,7 +7,10 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
-func IrisProvider(env *config.Env, embedFS embed.FS) *iris.Application {
+func IrisProvider(
+	env *config.Env,
+	embedFS embed.FS,
+) *iris.Application {
 	app := iris.New()
 
 	engine := iris.Django(embedFS, ".html.django")
