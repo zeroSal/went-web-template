@@ -3,8 +3,8 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"webtemplate/app/config"
-	"webtemplate/registry"
+	"webtemplate/app/registry"
+	"webtemplate/app/service/env"
 
 	"github.com/kataras/iris/v12"
 	"github.com/zeroSal/went-clio/clio"
@@ -12,12 +12,13 @@ import (
 )
 
 var _ command.Interface = (*Serve)(nil)
+
 type Serve struct {
 	command.Base
 }
 
 func init() {
-    registry.Command.Register(&Serve{})
+	registry.Command.Register(&Serve{})
 }
 
 func (c *Serve) GetHeader() command.Header {
@@ -34,7 +35,7 @@ func (c *Serve) Invoke() any {
 
 func (c *Serve) run(
 	ctx context.Context,
-	env *config.Env,
+	env *env.Env,
 	clio *clio.Clio,
 	irisApp *iris.Application,
 ) error {

@@ -2,15 +2,15 @@ package app
 
 import (
 	"webtemplate/app/bootstrap/module"
-	"webtemplate/app/config"
+	"webtemplate/app/service/env"
 
 	"go.uber.org/fx"
 )
 
 var Container = fx.Module(
 	"container",
-	fx.Provide(module.IrisProvider),
-	fx.Provide(module.AuditLoggerProvider),
-	fx.Provide(module.ErrorLoggerProvider),
-	fx.Provide(config.LoadEnv),
+	module.Provider,
+	module.Web,
+	module.Loggers,
+	fx.Provide(env.LoadEnv),
 )

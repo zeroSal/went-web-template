@@ -1,4 +1,4 @@
-package config
+package env
 
 import (
 	"errors"
@@ -49,7 +49,7 @@ func LoadEnv() *Env {
 }
 
 func (e *Env) Validate() error {
-	if (e.Env != "dev" && e.Env != "prod") {
+	if e.Env != "dev" && e.Env != "prod" {
 		return errors.New("invalid env provided (it must be 'dev' or 'prod')")
 	}
 

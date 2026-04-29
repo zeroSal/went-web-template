@@ -3,8 +3,8 @@ package bootstrap
 import (
 	"fmt"
 	"os"
-	"webtemplate/app/bootstrap/module"
-	"webtemplate/app/config"
+	"webtemplate/app/service/env"
+	"webtemplate/app/service/logger"
 
 	"go.uber.org/fx"
 )
@@ -15,7 +15,7 @@ var Init = fx.Options(
 	fx.Invoke(InitLoggers),
 )
 
-func InitWorkingDirs(env *config.Env) error {
+func InitWorkingDirs(env *env.Env) error {
 	dirs := []string{
 		env.GetLogsDir(),
 		env.GetUploadsDir(),
@@ -30,13 +30,13 @@ func InitWorkingDirs(env *config.Env) error {
 	return nil
 }
 
-func ValidateEnv(env *config.Env) error {
+func ValidateEnv(env *env.Env) error {
 	return env.Validate()
 }
 
 func InitLoggers(
-	auditLogger *module.AuditLogger,
-	errorLogger *module.ErrorLogger,
+	auditLogger *logger.AuditLogger,
+	errorLogger *logger.ErrorLogger,
 ) error {
 	if err := auditLogger.Init(); err != nil {
 		return err

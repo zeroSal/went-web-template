@@ -6,8 +6,9 @@ import (
 	"fmt"
 	"os"
 	"webtemplate/app"
-	_ "webtemplate/cmd"
-	"webtemplate/registry"
+	_ "webtemplate/app/cmd"
+	_ "webtemplate/app/controller"
+	"webtemplate/app/registry"
 
 	"github.com/zeroSal/went-clio/clio"
 	"github.com/zeroSal/went-command/command"
@@ -19,7 +20,7 @@ var Version = ""
 var Channel = ""
 var BuildDate = ""
 
-//go:embed res/* static/* templates/*
+//go:embed res/* static/* templates/* config/*
 var EmbedFS embed.FS
 
 func main() {
@@ -40,9 +41,9 @@ func main() {
 
 	root := &cobra.Command{
 		Version: fmt.Sprintf("%s-%s (%s)", Version, Channel, BuildDate),
-		Use:   "clitemplate",
-		Short: "{{ SHORT_PROJECT_DESCRIPTION }}",
-		Long:  "{{ LONG_PROJECT_DESCRIPTION }}",
+		Use:     "clitemplate",
+		Short:   "{{ SHORT_PROJECT_DESCRIPTION }}",
+		Long:    "{{ LONG_PROJECT_DESCRIPTION }}",
 	}
 
 	run := func(command command.Interface) {

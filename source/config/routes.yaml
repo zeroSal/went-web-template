@@ -1,0 +1,18 @@
+routes:
+  - path: /login
+    method: [GET, POST]
+    handlers:
+      GET: Login.Index
+      POST: Login.Login
+    require: IS_AUTHENTICATED_ANONYMOUSLY
+
+  - path: /logout
+    method: [GET, POST]
+    handler: Login.Logout
+    require: IS_AUTHENTICATED_ANONYMOUSLY
+
+  - path: /
+    method: [GET]
+    handler: Home.Index
+    require: AUTH_REQUIRED
+

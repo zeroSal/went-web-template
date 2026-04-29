@@ -10,10 +10,10 @@ import (
 )
 
 type Kernel struct {
-	Context    context.Context
-	EmbedFS    embed.FS
-	Specs      *Specs
-	Clio       *clio.Clio
+	Context context.Context
+	EmbedFS embed.FS
+	Specs   *Specs
+	Clio    *clio.Clio
 }
 
 func NewKernel(
@@ -31,7 +31,7 @@ func NewKernel(
 }
 
 func (a *Kernel) Run(invoke any, opts ...fx.Option) error {
-	contextProvider := func () context.Context {
+	contextProvider := func() context.Context {
 		return a.Context
 	}
 
