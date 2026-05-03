@@ -16,14 +16,14 @@ type Env struct {
 	Port   int
 }
 
-func LoadEnv() *Env {
+func Load() *Env {
 	_ = godotenv.Load()
 
 	env := &Env{
 		Env:    "dev",
 		VarDir: "var",
-		Host:   "127.0.0.1",
-		Port:   3096,
+		Host: "127.0.0.1",
+		Port: 3096,
 	}
 
 	if environment := os.Getenv("ENV"); environment != "" {
@@ -40,9 +40,11 @@ func LoadEnv() *Env {
 
 	if port := os.Getenv("PORT"); port != "" {
 		portInt, err := strconv.Atoi(port)
-		if err == nil {
-			env.Port = portInt
+		if err != nil {
+			portInt = 0
 		}
+
+		env.Port = portInt
 	}
 
 	return env
@@ -62,8 +64,4 @@ func (e *Env) Validate() error {
 
 func (e *Env) GetLogsDir() string {
 	return fmt.Sprintf("%s/logs", e.VarDir)
-}
-
-func (e *Env) GetUploadsDir() string {
-	return fmt.Sprintf("%s/uploads", e.VarDir)
 }

@@ -9,7 +9,7 @@ require (
 	github.com/zeroSal/went-clio v1.3.0
 	github.com/zeroSal/went-command v1.3.0
 	github.com/zeroSal/went-logger v1.0.0
-	github.com/zeroSal/went-web v1.4.0
+	github.com/zeroSal/went-web v1.5.0
 	go.uber.org/fx v1.24.0
 )
 
@@ -27,9 +27,7 @@ require (
 	github.com/gomarkdown/markdown v0.0.0-20250810172220-2e2c11897d1a // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
-	github.com/gorilla/securecookie v1.1.2 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/iris-contrib/middleware/csrf v0.0.0-20251225090426-92c6f28facda // indirect
 	github.com/iris-contrib/schema v0.0.6 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/kataras/blocks v0.0.8 // indirect

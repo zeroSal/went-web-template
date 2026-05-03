@@ -6,19 +6,34 @@ import (
 	"webtemplate/app/service/env"
 	"webtemplate/app/service/logger"
 
+	"github.com/zeroSal/went-web/controller"
+
 	"go.uber.org/fx"
 )
 
 var Init = fx.Options(
-	fx.Invoke(InitWorkingDirs),
-	fx.Invoke(ValidateEnv),
-	fx.Invoke(InitLoggers),
+	fx.Invoke(initWorkingDirs),
+	fx.Invoke(validateEnv),
+	fx.Invoke(initLoggers),
+	fx.Invoke(controller.Mount),
 )
 
-func InitWorkingDirs(env *env.Env) error {
+func initLoggers(
+	auditLogger *logger.AuditLogger,
+	errorLogger *logger.ErrorLogger,
+) error {
+	if err := auditLogger.Init(); err != nil {
+		return err
+	}
+	if err := errorLogger.Init(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func initWorkingDirs(env *env.Env) error {
 	dirs := []string{
 		env.GetLogsDir(),
-		env.GetUploadsDir(),
 	}
 
 	for _, dir := range dirs {
@@ -30,19 +45,6 @@ func InitWorkingDirs(env *env.Env) error {
 	return nil
 }
 
-func ValidateEnv(env *env.Env) error {
+func validateEnv(env *env.Env) error {
 	return env.Validate()
-}
-
-func InitLoggers(
-	auditLogger *logger.AuditLogger,
-	errorLogger *logger.ErrorLogger,
-) error {
-	if err := auditLogger.Init(); err != nil {
-		return err
-	}
-	if err := errorLogger.Init(); err != nil {
-		return err
-	}
-	return nil
 }

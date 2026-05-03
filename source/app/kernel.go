@@ -3,7 +3,6 @@ package app
 import (
 	"context"
 	"embed"
-	"webtemplate/app/bootstrap"
 
 	"github.com/zeroSal/went-clio/clio"
 	"go.uber.org/fx"
@@ -37,7 +36,6 @@ func (a *Kernel) Run(invoke any, opts ...fx.Option) error {
 
 	di := []fx.Option{
 		Container,
-		bootstrap.Init,
 		fx.Supply(a.Clio),
 		fx.Supply(a.EmbedFS),
 		fx.Supply(a.Specs),

@@ -3,8 +3,8 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"webtemplate/app/registry"
 	"webtemplate/app/service/env"
+	"webtemplate/registry"
 
 	"github.com/kataras/iris/v12"
 	"github.com/zeroSal/went-clio/clio"
@@ -12,7 +12,6 @@ import (
 )
 
 var _ command.Interface = (*Serve)(nil)
-
 type Serve struct {
 	command.Base
 }
@@ -24,8 +23,8 @@ func init() {
 func (c *Serve) GetHeader() command.Header {
 	return command.Header{
 		Use:   "serve",
-		Short: "Starts the web server",
-		Long:  "Starts the web server on the configured host and port.",
+		Short: "Start the web server",
+		Long:  "Start the web server.",
 	}
 }
 
@@ -37,15 +36,13 @@ func (c *Serve) run(
 	ctx context.Context,
 	env *env.Env,
 	clio *clio.Clio,
-	irisApp *iris.Application,
+	app *iris.Application,
 ) error {
 	clio.Banner()
 
-	addr := fmt.Sprintf("%s:%d", env.Host, env.Port)
-	clio.Info("The web server is listening on http://%s", addr)
-	if err := irisApp.Listen(addr, iris.WithoutStartupLog); err != nil {
-		return err
-	}
+	bind := fmt.Sprintf("%s:%d", env.Host, env.Port)
 
-	return nil
+	clio.Info("Server bound on %s", bind)
+
+	return app.Listen(bind, iris.WithoutStartupLog)
 }
